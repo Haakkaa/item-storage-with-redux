@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import styles from "../../styles/Header.module.css";
 import { ROUTES } from "../../utils/routes";
@@ -12,19 +12,22 @@ import { toggleForm } from '../../features/user/userSlice'
 
 const Header = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const { currentUser } = useSelector(({ user }) => user)
 
   const [values, setValues] = useState({ name: 'Guest', avatar: AVATAR})
-
-  const handleClick = () => {
-    if(!currentUser) dispatch(toggleForm(true))
-  }
-
+  
   useEffect(() => {
     if(!currentUser) return;
-
+    
     setValues(currentUser)
   }, [currentUser])
+  
+  const handleClick = () => {
+    if(!currentUser) dispatch(toggleForm(true))
+    else navigate(ROUTES.PROFILE);
+  }
 
   return (
     <div className={styles.header}>
